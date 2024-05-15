@@ -1,1 +1,0 @@
-[{"name": "Oliver's Twist", "author": "Charles Dickens", "genre": "Novel,Social-Novel,Literary-Fiction", "price": 9.99}, {"name": "Make Epic Money", "author": "Ankur Warikoo", "genre": "Personal-Finance,Finance", "price": 3.59}]
