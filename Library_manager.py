@@ -116,3 +116,139 @@
 
 # if __name__ == "__main__":
 #     main() # <------ The main function running separately 
+
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# new code 
+
+import sys
+import json
+
+class LibraryManager:
+    def __init__(self):
+        self.filename = "Library_Books.txt"
+        self.books_list = []
+        try:
+            with open(self.filename, 'r') as f:
+                self.books_list = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.books_list = []
+
+    def save_books(self):
+        with open(self.filename, 'w') as f:
+            json.dump(self.books_list, f, indent=4)
+
+    def add_book(self):
+        while True:
+            try:
+                name = input("Enter the name of the book: ")
+                author = input("Enter the name of the author of the book: ")
+                genre = input("Enter the name of genre/category of the book: ")
+                price = float(input("Enter the price of the book (in dollars): "))
+                self.books_list.append({"name": name, "author": author, "genre": genre, "price": price})
+                self.save_books()
+                print(f"The Book '{name}' added to the Library Records!")
+                another_book = input("Do you want to add another book (y/n): ").lower()
+                if another_book not in ("y", "yes"):
+                    break
+            except ValueError:
+                print("Invalid price format. Please enter a valid numerical value!")
+
+    def remove_books(self):
+        while True:
+            try:
+                num = int(input("Enter the number of books you want to remove: "))
+                if num > len(self.books_list):
+                    raise ValueError(f"Invalid number of books. There are only {len(self.books_list)} books in the library.")
+                for _ in range(num):
+                    name = input("Enter the name of the book to remove: ")
+                    for book in self.books_list:
+                        if book["name"].lower() == name.lower():
+                            self.books_list.remove(book)
+                            self.save_books()
+                            print(f"The Book '{name}' is removed successfully!")
+                            break
+                    else:
+                        print(f"The Book '{name}' not found in the Library Records!")
+                break
+            except ValueError as e:
+                print(e)
+
+    def display_books(self):
+        if self.books_list:
+            print("| Book-Name | Author | Genre | Price |")
+            for book in self.books_list:
+                print(f'{book["name"]} | {book["author"]} | {book["genre"]} | ${book["price"]:.2f}')
+        else:
+            print("No books are available in the library.")
+
+    def author_collection(self):
+        author = input("Enter the author's name: ")
+        author_books = [book for book in self.books_list if book["author"].lower() == author.lower()]
+        if author_books:
+            print(f"Books by {author}:")
+            for book in author_books:
+                print(f'{book["name"]} | {book["genre"]} | ${book["price"]:.2f}')
+        else:
+            print(f"No books found by {author}.")
+
+    def genre_collection(self):
+        genre = input("Enter the genre: ")
+        genre_books = [book for book in self.books_list if book["genre"].lower() == genre.lower()]
+        if genre_books:
+            print(f"Books in the {genre} genre:")
+            for book in genre_books:
+                print(f'{book["name"]} | {book["author"]} | ${book["price"]:.2f}')
+        else:
+            print(f"No books found in the {genre} genre.")
+
+    def price_changer(self):
+        name = input("Enter the name of the book to change the price: ")
+        for book in self.books_list:
+            if book["name"].lower() == name.lower():
+                try:
+                    new_price = float(input("Enter the new price: "))
+                    book["price"] = new_price
+                    self.save_books()
+                    print(f"The price of '{name}' has been updated to ${new_price:.2f}.")
+                    break
+                except ValueError:
+                    print("Invalid price format. Please enter a valid numerical value.")
+        else:
+            print(f"The Book '{name}' not found in the Library Records!")
+
+    def about(self):
+        print("This is a Library Manager program. You can add, remove, view books, and more.")
+
+Func = LibraryManager()
+
+def main():
+    while True:
+        print("_____________________LIBRARY MANAGER_____________________")
+        print(" (1) Add a Book \n (2) Total Books \n (3) Author's Collection \n (4) Genre Wise Collection \n (5) Price Changer \n (6) Remove a Book \n (7) About/Instructions \n (8) Exit \n ")
+        try:
+            choice = int(input("Enter your choice: "))
+            if choice == 1:
+                Func.add_book()
+            elif choice == 2:
+                Func.display_books()
+            elif choice == 3:
+                Func.author_collection()
+            elif choice == 4:
+                Func.genre_collection()
+            elif choice == 5:
+                Func.price_changer()
+            elif choice == 6:
+                Func.remove_books()
+            elif choice == 7:
+                Func.about()
+            elif choice == 8:
+                sys.exit()
+            else:
+                print("Wrong Input. Try Again!")
+        except ValueError:
+            print("Invalid choice. Please enter a number.")
+
+if __name__ == "__main__":
+    main()
