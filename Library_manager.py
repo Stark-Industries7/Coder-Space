@@ -125,8 +125,8 @@
 import sys
 import json
 
-class LibraryManager:
-    def __init__(self):
+class LibraryManager: # <------ This is the main class in which all the functions for "THE LIBRARY MANAGER" are held
+    def __init__(self): # <------ __init__ function which checks if there is any available data or not 
         self.filename = "Library_Books.txt"
         self.books_list = []
         try:
@@ -135,11 +135,11 @@ class LibraryManager:
         except (FileNotFoundError, json.JSONDecodeError):
             self.books_list = []
 
-    def save_books(self):
+    def save_books(self): # <------ This function saves the details of the books  
         with open(self.filename, 'w') as f:
             json.dump(self.books_list, f, indent=4)
 
-    def add_book(self):
+    def add_book(self): # <------ this function asks for new books details from the user 
         while True:
             try:
                 name = input("Enter the name of the book: ")
@@ -155,7 +155,7 @@ class LibraryManager:
             except ValueError:
                 print("Invalid price format. Please enter a valid numerical value!")
 
-    def remove_books(self):
+    def remove_books(self): # <------ this function removes the book/s entered by the user
         while True:
             try:
                 num = int(input("Enter the number of books you want to remove: "))
@@ -175,7 +175,7 @@ class LibraryManager:
             except ValueError as e:
                 print(e)
 
-    def display_books(self):
+    def display_books(self): # <------ this function displays the books details present in the database
         if self.books_list:
             print("| Book-Name | Author | Genre | Price |")
             for book in self.books_list:
